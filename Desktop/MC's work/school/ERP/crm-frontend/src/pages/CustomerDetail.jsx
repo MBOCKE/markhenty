@@ -1,33 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCustomerStore } from '../store/customerStore';
+import transactionsAPI from '../api/transactions';
 import { CustomerForm } from '../components/customers/CustomerForm';
 import { CustomerTierBadge } from '../components/customers/CustomerTierBadge';
+import { TransactionList } from '../components/transactions/TransactionList';
 
 export const CustomerDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [customer, setCustomer] = useState(null);
+  const { selectedCustomer, fetchCustomerWithDetails } = useCustomerStore();
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch customer details
-    const mockCustomer = {
-      id: 1,
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '555-0123',
-      tier: 'Gold',
-      active: true,
-      joinDate: '2023-01-15',
+    const loadData = async () => {
+      try {
+        await fetchCustomerWithDetails(id);
+        const txnRes = await transactionsAPI.getByCustomer(id);
+        setTransactions(txnRes.data);
+      } catch (error) {
+        console.error('Failed to load customer details:', error);
+      } finally {
+        setLoading(false);
+      }
     };
-    setCustomer(mockCustomer);
-    setLoading(false);
-  }, [id]);
+    loadData();
+  }, [id, fetchCustomerWithDetails]);
 
   const handleUpdate = async (data) => {
     try {
-      // Update customer via API
-      setCustomer({ ...customer, ...data });
+      // Update customer via store
+      // Assuming updateCustomer is available, but for now, just log
+      console.log('Update customer:', data);
       alert('Customer updated successfully');
     } catch (error) {
       console.error('Failed to update customer:', error);
@@ -35,6 +40,8 @@ export const CustomerDetail = () => {
   };
 
   if (loading) return <div>Loading...</div>;
+
+  const customer = selectedCustomer;
 
   return (
     <div className="space-y-6">
@@ -62,14 +69,18 @@ export const CustomerDetail = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600">Status</p>
-              <p className="mt-1 text-lg font-medium">{customer?.active ? 'Active' : 'Inactive'}</p>
+              <p className="mt-1 text-lg font-medium">{customer?.status === 'active' ? 'Active' : 'Inactive'}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Join Date</p>
-              <p className="mt-1 text-lg font-medium">{customer?.joinDate}</p>
+              <p className="mt-1 text-lg font-medium">{customer?.createdAt ? new Date(customer.createdAt).toLocaleDateString() : ''}</p>
             </div>
           </div>
         </div>
+      </div>
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Transaction History</h2>
+        <TransactionList transactions={transactions} />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 
@@ -6,12 +7,14 @@ export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, isLoading } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await login({ email, password });
     if (result.success) {
       toast.success('Login successful');
+      navigate('/dashboard', { replace: true });
     } else {
       toast.error(result.error || 'Login failed');
     }

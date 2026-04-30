@@ -1,5 +1,5 @@
 import { transactionClient } from './client';
-import { loadMockData, saveMockData, generateTransactions } from '../utils/mockData';
+import { loadMockData, saveMockData, generateTransactions, generateCustomers } from '../utils/mockData';
 import { customerAPI } from './customers';
 import toast from 'react-hot-toast';
 
@@ -8,7 +8,12 @@ import toast from 'react-hot-toast';
 const transactionsAPI = {
   getAll: async (params = {}) => {
     await new Promise(r => setTimeout(r, 500));
-    let transactions = loadMockData('transactions') || generateTransactions(500);
+    let transactions = loadMockData('transactions');
+    if (!transactions) {
+      const customers = loadMockData('customers') || generateCustomers(120);
+      transactions = generateTransactions(customers);
+      saveMockData('transactions', transactions);
+    }
     
     if (params.customerId) {
       transactions = transactions.filter(t => t.customerId === params.customerId);

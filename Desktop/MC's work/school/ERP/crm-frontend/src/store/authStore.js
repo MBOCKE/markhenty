@@ -41,6 +41,19 @@ export const useAuthStore = create(
         const token = localStorage.getItem('accessToken');
         if (!token) return false;
         
+        // If already authenticated from persisted state, just verify token
+        if (get().isAuthenticated) {
+          try {
+            const response = await authAPI.getCurrentUser();
+            return true;
+          } catch (error) {
+            // Token invalid, clear state
+            localStorage.removeItem('accessToken');
+            set({ user: null, isAuthenticated: false });
+            return false;
+          }
+        }
+        
         set({ isLoading: true });
         try {
           const response = await authAPI.getCurrentUser();

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useCustomerStore } from '../store/customerStore';
 import { CustomerTable } from '../components/customers/CustomerTable';
 import { CustomerSearch } from '../components/customers/CustomerSearch';
@@ -21,9 +21,9 @@ export const Customers = () => {
     }
   }, [filters.search, filters.tier, filters.page]);
 
-  const handleSearch = (searchTerm) => {
+  const handleSearch = useCallback((searchTerm) => {
     setFilters({ search: searchTerm });
-  };
+  }, [setFilters]);
 
   const handleTierFilter = (tier) => {
     setFilters({ tier });

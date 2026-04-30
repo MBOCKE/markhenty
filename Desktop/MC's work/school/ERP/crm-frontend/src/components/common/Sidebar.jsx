@@ -5,6 +5,7 @@ import {
   CreditCardIcon,
   BellIcon,
   ShieldCheckIcon,
+  DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 import { useAuthStore } from '../../store/authStore';
 
@@ -18,6 +19,7 @@ const navigation = [
 
 const adminNavigation = [
   { name: 'Admin Panel', href: '/admin', icon: ShieldCheckIcon },
+  { name: 'Logs Dashboard', href: '/logs', icon: DocumentTextIcon },
 ];
 
 export const Sidebar = () => {

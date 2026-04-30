@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { RuleEngineEditor } from '../components/admin/RuleEngineEditor';
 import { AuditLogViewer } from '../components/admin/AuditLogViewer';
 import { UserManager } from '../components/admin/UserManager';
+import { NotificationSender } from '../components/admin/NotificationSender';
 
 export const AdminPanel = () => {
-  const [tab, setTab] = useState('rules');
+  const [tab, setTab] = useState('notifications');
   const [users, setUsers] = useState([
     { id: 1, email: 'admin@example.com', role: 'admin' },
     { id: 2, email: 'user1@example.com', role: 'user' },
@@ -36,7 +37,7 @@ export const AdminPanel = () => {
       
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8" aria-label="Tabs">
-          {['rules', 'users', 'logs'].map((tabName) => (
+          {['notifications', 'rules', 'users', 'logs'].map((tabName) => (
             <button
               key={tabName}
               onClick={() => setTab(tabName)}
@@ -53,6 +54,7 @@ export const AdminPanel = () => {
       </div>
 
       <div className="mt-6">
+        {tab === 'notifications' && <NotificationSender />}
         {tab === 'rules' && <RuleEngineEditor onSave={handleSaveRules} />}
         {tab === 'users' && <UserManager users={users} onAddUser={handleAddUser} onDeleteUser={handleDeleteUser} />}
         {tab === 'logs' && <AuditLogViewer logs={logs} />}

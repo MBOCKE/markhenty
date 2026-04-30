@@ -38,12 +38,18 @@ export const notificationAPI = {
     return { data: { success: true } };
   },
 
-  deleteOldNotifications: async (customerId, days = 30) => {
-    const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+  createNotification: async (notificationData) => {
+    await new Promise(r => setTimeout(r, 300));
     let notifications = loadMockData('notifications') || [];
-    notifications = notifications.filter(n => !(n.customerId === customerId && n.createdAt < cutoff));
+    const newNotification = {
+      id: `notif_${Date.now()}`,
+      ...notificationData,
+      is_read: 0,
+      createdAt: new Date().toISOString(),
+    };
+    notifications.unshift(newNotification);
     saveMockData('notifications', notifications);
-    return { data: { deleted: true } };
+    return { data: newNotification };
   },
 };
 

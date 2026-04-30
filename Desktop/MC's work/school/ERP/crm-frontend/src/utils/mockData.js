@@ -16,6 +16,7 @@ export const generateCustomers = (count = 100) => Array.from({ length: count }, 
   totalSpent: (Math.random() * 50000 + 100).toFixed(2),
   lastPurchase: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   createdAt: new Date(Date.now() - Math.random() * 730 * 24 * 60 * 60 * 1000).toISOString(),
+  status: 'active',
   points: Math.floor(Math.random() * 5000),
   // 25+ factors for classification (mock scores)
   factors: {
@@ -27,15 +28,23 @@ export const generateCustomers = (count = 100) => Array.from({ length: count }, 
 }));
 
  // Transactions (500)
-export const generateTransactions = (count = 500) => Array.from({ length: count }, (_, i) => ({
-  id: `txn_${10000 + i}`,
-  customerId: `cust_${1000 + Math.floor(Math.random() * 100)}`,
-  amount: (Math.random() * 500 + 10).toFixed(2),
-  date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
-  type: ['purchase', 'refund', 'bonus'][Math.floor(Math.random() * 3)],
-  status: 'completed',
-  paymentMethod: ['credit_card', 'debit_card', 'cash'][Math.floor(Math.random() * 3)],
-}));
+export const generateTransactions = (customers, transactionsPerCustomer = 3) => {
+  const transactions = [];
+  customers.forEach((customer, idx) => {
+    for (let i = 0; i < transactionsPerCustomer + Math.floor(Math.random() * 3); i++) { // 3-5 per customer
+      transactions.push({
+        id: `txn_${10000 + idx * 10 + i}`,
+        customerId: customer.id,
+        amount: (Math.random() * 500 + 10).toFixed(2),
+        date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
+        type: ['purchase', 'refund', 'bonus'][Math.floor(Math.random() * 3)],
+        status: 'completed',
+        paymentMethod: ['credit_card', 'debit_card', 'cash'][Math.floor(Math.random() * 3)],
+      });
+    }
+  });
+  return transactions;
+};
 
  // Notifications (100)
 export const generateNotifications = (count = 100) => Array.from({ length: count }, (_, i) => ({
@@ -107,6 +116,21 @@ export const initMockData = () => {
   if (!loadMockData('customers')) {
     const customers = generateCustomers(120);
     saveMockData('customers', customers);
+    const transactions = generateTransactions(customers);
+    saveMockData('transactions', transactions);
+  }
+  if (!loadMockData('transactions')) {
+    const customers = loadMockData('customers') || generateCustomers(120);
+    const transactions = generateTransactions(customers);
+    saveMockData('transactions', transactions);
+  }
+  if (!loadMockData('users')) {
+    const users = generateUsers();
+    saveMockData('users', users);
+  }
+  if (!loadMockData('audits')) {
+    const audits = generateAudits(200);
+    saveMockData('audits', audits);
   }
   // Similar for others
 };

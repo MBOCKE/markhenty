@@ -8,6 +8,7 @@ import { CustomerDetail } from '../pages/CustomerDetail';
 import { Transactions } from '../pages/Transactions';
 import { Notifications } from '../pages/Notifications';
 import { AdminPanel } from '../pages/AdminPanel';
+import { LogsDashboard } from '../pages/LogsDashboard';
 import ClassificationNotifications from '../pages/ClassificationNotifications.jsx';
 import { useAuthStore } from '../store/authStore';
 
@@ -18,15 +19,29 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   return children;
 };
 
+const AuthGuard = ({ children }) => {
+  const { isAuthenticated } = useAuthStore();
+  if (isAuthenticated) return <Navigate to="/dashboard" replace />;
+  return children;
+};
+
 export const router = createBrowserRouter([
   {
     path: '/login',
-    element: <AuthLayout />,
+    element: (
+      <AuthGuard>
+        <AuthLayout />
+      </AuthGuard>
+    ),
     children: [{ index: true, element: <Login /> }],
   },
   {
     path: '/',
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: 'dashboard', element: <Dashboard /> },
@@ -35,6 +50,14 @@ export const router = createBrowserRouter([
       { path: 'transactions', element: <Transactions /> },
 { path: 'notifications', element: <Notifications /> },
       { path: 'classification-notifications', element: <ClassificationNotifications /> },
+      {
+        path: 'logs',
+        element: (
+          <ProtectedRoute adminOnly>
+            <LogsDashboard />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: 'admin',
         element: (
