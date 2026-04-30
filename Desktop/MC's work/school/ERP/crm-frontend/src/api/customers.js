@@ -5,8 +5,10 @@ import toast from 'react-hot-toast';
 // initMockData(); // App.jsx
 
 export const customerAPI = {
-  // Mock - TODO: Replace with Customer Service @3002
+  // TODO: Replace with Customer Service API calls @3002
+  // Replace loadMockData/saveMockData with actual API calls
   getAllCustomers: async (params = {}) => {
+    // TODO: Replace mock implementation with: return customerClient.get('/customers', { params });
     await new Promise(r => setTimeout(r, 500));
     let customers = loadMockData('customers') || generateCustomers(100);
     
@@ -29,6 +31,7 @@ export const customerAPI = {
   },
 
   getCustomerById: async (id) => {
+    // TODO: Replace mock implementation with: return customerClient.get(`/customers/${id}`);
     await new Promise(r => setTimeout(r, 300));
     const customers = loadMockData('customers') || [];
     const customer = customers.find(c => c.id === id);
@@ -37,6 +40,7 @@ export const customerAPI = {
   },
 
   createCustomer: async (data) => {
+    // TODO: Replace mock implementation with: return customerClient.post('/customers', data);
     await new Promise(r => setTimeout(r, 600));
     let customers = loadMockData('customers') || [];
     const newCustomer = {
@@ -54,6 +58,7 @@ export const customerAPI = {
   },
 
   updateCustomer: async (id, data) => {
+    // TODO: Replace mock implementation with: return customerClient.put(`/customers/${id}`, data);
     await new Promise(r => setTimeout(r, 400));
     let customers = loadMockData('customers') || [];
     const index = customers.findIndex(c => c.id === id);
@@ -65,6 +70,7 @@ export const customerAPI = {
   },
 
   deleteCustomer: async (id) => {
+    // TODO: Replace mock implementation with: return customerClient.delete(`/customers/${id}`);
     await new Promise(r => setTimeout(r, 300));
     let customers = loadMockData('customers') || [];
     const filtered = customers.filter(c => c.id !== id);
@@ -77,6 +83,7 @@ export const customerAPI = {
 
   // Export
   exportCSV: async () => {
+    // TODO: Move CSV export logic to Customer Service @3002
     const all = (await customerAPI.getAllCustomers()).data;
     // TODO: Use papaparse for CSV download
     const csv = 'ID,Name,Email,Tier,Total Spent\n' + all.map(c => `${c.id},"${c.name}",${c.email},${c.tier},${c.totalSpent}`).join('\\n');

@@ -8,18 +8,21 @@ import toast from 'react-hot-toast';
 export const bonusAPI = {
   // Mock bonus calculation/redemption - TODO: Bonus Service @3004
   getBalance: async (customerId) => {
+    // TODO: Replace mock implementation with: return bonusClient.get(`/bonus/${customerId}/balance`);
     await new Promise(r => setTimeout(r, 300));
     const customer = (await customerAPI.getCustomerById(customerId)).data;
     return { data: { points: customer.points || 0 } };
   },
 
   calculateBonus: async (customerId, amount, tierMultiplier = 1) => {
+    // TODO: Replace mock implementation with: return bonusClient.post('/bonus/calculate', { customerId, amount, tierMultiplier });
     await new Promise(r => setTimeout(r, 400));
     const bonusPoints = Math.floor(amount * 0.1 * tierMultiplier); // 10% of amount
     return { data: { bonusPoints, multiplier: tierMultiplier } };
   },
 
   redeem: async (customerId, points) => {
+    // TODO: Replace mock implementation with: return bonusClient.post('/bonus/redeem', { customerId, points });
     await new Promise(r => setTimeout(r, 500));
     let customers = loadMockData('customers') || generateCustomers();
     const index = customers.findIndex(c => c.id === customerId);
@@ -33,6 +36,7 @@ export const bonusAPI = {
   },
 
   awardBonus: async (customerId, points, reason) => {
+    // TODO: Replace mock implementation with: return bonusClient.post('/bonus/award', { customerId, points, reason });
     await new Promise(r => setTimeout(r, 400));
     let customers = loadMockData('customers') || generateCustomers();
     const index = customers.findIndex(c => c.id === customerId);

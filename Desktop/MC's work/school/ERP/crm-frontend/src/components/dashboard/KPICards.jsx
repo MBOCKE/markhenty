@@ -5,7 +5,7 @@ export const KPICards = ({ kpiData }) => {
     { title: 'Total Customers', value: kpiData?.totalCustomers || 0, color: 'bg-blue-500' },
     { title: 'Active Transactions', value: kpiData?.activeTransactions || 0, color: 'bg-green-500' },
     { title: 'Pending Notifications', value: kpiData?.pendingNotifications || 0, color: 'bg-yellow-500' },
-    { title: 'Total Bonus', value: `$${kpiData?.totalBonus || 0}`, color: 'bg-purple-500' },
+    { title: 'Total Bonus', value: `XAF ${kpiData?.totalBonus || 0}`, color: 'bg-purple-500' },
   ];
 
   return (

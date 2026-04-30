@@ -1,1 +1,0 @@
-# Detailed TODO for Tasks 5-7\n\n## Task 5: UI Features\n- [ ] Dark mode in uiStore.js\n- [ ] Header updates\n- [ ] ConfirmDialog\n\n## Task 6: Dependencies\n- [ ] Check/install\n\n## Task 7: Testing\n- [ ] Tests\n\nNext: uiStore implementation

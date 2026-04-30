@@ -5,7 +5,10 @@ import toast from 'react-hot-toast';
 initMockData();
 
 export const notificationAPI = {
+  // TODO: Replace with Notification Service API calls @3005
+  // Replace loadMockData/saveMockData with actual API calls
   getNotifications: async (customerId, limit = 50, offset = 0) => {
+    // TODO: Replace mock implementation with: return notificationClient.get(`/notifications/${customerId}`, { params: { limit, offset } });
     await new Promise(r => setTimeout(r, 300));
     let notifications = loadMockData('notifications') || generateNotifications(100);
     notifications = notifications.filter(n => n.customerId === customerId).slice(offset, offset + limit);
@@ -13,6 +16,7 @@ export const notificationAPI = {
   },
 
   getUnreadCount: async (customerId) => {
+    // TODO: Replace mock implementation with: return notificationClient.get(`/notifications/${customerId}/unread`);
     await new Promise(r => setTimeout(r, 200));
     const notifications = loadMockData('notifications') || [];
     const unread = notifications.filter(n => n.customerId === customerId && !n.is_read).length;
@@ -20,6 +24,7 @@ export const notificationAPI = {
   },
 
   markAsRead: async (notificationId, customerId) => {
+    // TODO: Replace mock implementation with: return notificationClient.put(`/notifications/${notificationId}/read`);
     await new Promise(r => setTimeout(r, 200));
     let notifications = loadMockData('notifications') || [];
     const index = notifications.findIndex(n => n.id === notificationId);
@@ -31,6 +36,7 @@ export const notificationAPI = {
   },
 
   markAllAsRead: async (customerId) => {
+    // TODO: Replace mock implementation with: return notificationClient.put(`/notifications/${customerId}/read-all`);
     await new Promise(r => setTimeout(r, 400));
     let notifications = loadMockData('notifications') || [];
     notifications = notifications.map(n => n.customerId === customerId ? { ...n, is_read: 1 } : n);
@@ -39,6 +45,7 @@ export const notificationAPI = {
   },
 
   createNotification: async (notificationData) => {
+    // TODO: Replace mock implementation with: return notificationClient.post('/notifications', notificationData);
     await new Promise(r => setTimeout(r, 300));
     let notifications = loadMockData('notifications') || [];
     const newNotification = {

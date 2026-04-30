@@ -6,7 +6,10 @@ import toast from 'react-hot-toast';
 // initMockData();
 
 const transactionsAPI = {
+  // TODO: Replace with Transaction Service API calls @3003
+  // Replace loadMockData/saveMockData with actual API calls
   getAll: async (params = {}) => {
+    // TODO: Replace mock implementation with: return transactionClient.get('/transactions', { params });
     await new Promise(r => setTimeout(r, 500));
     let transactions = loadMockData('transactions');
     if (!transactions) {
@@ -34,6 +37,7 @@ const transactionsAPI = {
   getByCustomer: async (customerId) => transactionsAPI.getAll({ customerId }),
 
   create: async (transactionData) => {
+    // TODO: Replace mock implementation with: return transactionClient.post('/transactions', transactionData);
     await new Promise(r => setTimeout(r, 700));
     let transactions = loadMockData('transactions') || [];
     const newTxn = {
@@ -45,6 +49,7 @@ const transactionsAPI = {
     transactions.unshift(newTxn);
     saveMockData('transactions', transactions);
     
+    // TODO: Move customer totalSpent update to Transaction Service @3003
     // Update customer totalSpent
     const custRes = await customerAPI.getCustomerById(transactionData.customerId);
     const updatedCust = {
@@ -58,6 +63,7 @@ const transactionsAPI = {
   },
 
   getStats: async () => {
+    // TODO: Replace mock implementation with: return transactionClient.get('/transactions/stats');
     await new Promise(r => setTimeout(r, 400));
     const transactions = loadMockData('transactions') || [];
     const monthly = {};

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { useAuthStore } from '../store/authStore';
 import { RuleEngineEditor } from '../components/admin/RuleEngineEditor';
 import { AuditLogViewer } from '../components/admin/AuditLogViewer';
 import { UserManager } from '../components/admin/UserManager';
 import { NotificationSender } from '../components/admin/NotificationSender';
 
 export const AdminPanel = () => {
+  const { user } = useAuthStore();
   const [tab, setTab] = useState('notifications');
+  // Check if user has admin or manager role
+  const hasRuleAccess = user?.roles?.includes('admin') || user?.roles?.includes('manager');
   const [users, setUsers] = useState([
     { id: 1, email: 'admin@example.com', role: 'admin' },
     { id: 2, email: 'user1@example.com', role: 'user' },
@@ -37,19 +41,25 @@ export const AdminPanel = () => {
       
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8" aria-label="Tabs">
-          {['notifications', 'rules', 'users', 'logs'].map((tabName) => (
-            <button
-              key={tabName}
-              onClick={() => setTab(tabName)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                tab === tabName
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              {tabName.charAt(0).toUpperCase() + tabName.slice(1)}
-            </button>
-          ))}
+          {['notifications', 'rules', 'users', 'logs'].map((tabName) => {
+            // Hide rules tab from regular users
+            if (tabName === 'rules' && !hasRuleAccess) {
+              return null;
+            }
+            return (
+              <button
+                key={tabName}
+                onClick={() => setTab(tabName)}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  tab === tabName
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                {tabName.charAt(0).toUpperCase() + tabName.slice(1)}
+              </button>
+            );
+          })}
         </nav>
       </div>
 

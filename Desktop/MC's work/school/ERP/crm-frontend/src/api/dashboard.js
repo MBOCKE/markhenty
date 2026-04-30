@@ -4,6 +4,7 @@ import { customerAPI } from './customers';
 export const dashboardAPI = {
   // Mock dashboard data - TODO: Real dashboard service
   getSummary: async () => {
+    // TODO: Replace mock implementation with: return dashboardClient.get('/dashboard/summary');
     await new Promise(r => setTimeout(r, 600));
     const customersRes = await customerAPI.getAllCustomers();
     const customers = customersRes.data;
@@ -20,6 +21,7 @@ export const dashboardAPI = {
   },
 
   getRecentActivity: async () => {
+    // TODO: Replace mock implementation with: return dashboardClient.get('/dashboard/activity');
     await new Promise(r => setTimeout(r, 400));
     const audits = loadMockData('audits') || generateAudits(50);
     const recent = audits.slice(0, 10).map(a => ({

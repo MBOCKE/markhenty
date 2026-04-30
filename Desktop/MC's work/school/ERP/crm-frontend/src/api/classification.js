@@ -8,6 +8,7 @@ export const classificationAPI = {
     try {
       return await classificationClient.get(`/api/v1/classify/${customerId}`);
     } catch {
+      // TODO: Remove mock fallback when Classification Service @3003 is live
       // Mock tier based on spending
       const customers = loadMockData('customers') || [];
       const customer = customers.find(c => c.id === customerId);
@@ -18,6 +19,7 @@ export const classificationAPI = {
   },
 
   getClassificationHistory: async (customerId) => {
+    // TODO: Replace mock implementation with: return classificationClient.get(`/api/v1/classify/${customerId}/history`);
     await new Promise(r => setTimeout(r, 300));
     // Mock history
     const history = [
@@ -32,6 +34,7 @@ export const classificationAPI = {
     try {
       return await classificationClient.get('/api/v1/classify/stats/tiers');
     } catch {
+      // TODO: Remove mock fallback when Classification Service @3003 is live
       return {
         data: [
           { current_tier: 'NORMAL', count: 50 },

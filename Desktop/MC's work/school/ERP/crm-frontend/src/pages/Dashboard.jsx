@@ -22,10 +22,21 @@ export const Dashboard = () => {
         ]);
 
         setKpiData(summaryRes.data);
-        setTierData(tierRes.data.map(tier => ({
-          name: tier.current_tier || tier.name || 'NORMAL',
-          percentage: Math.round((tier.count / summaryRes.data.totalCustomers) * 100),
-        })));
+        // Calculate percentages and ensure they sum to exactly 100%
+        const total = summaryRes.data.totalCustomers;
+        const tierDataWithPercent = tierRes.data.map((tier, index, array) => {
+          let percent = Math.round((tier.count / total) * 100);
+          // For the last item, adjust to ensure total is exactly 100%
+          if (index === array.length - 1) {
+            const currentSum = array.slice(0, -1).reduce((sum, t) => sum + Math.round((t.count / total) * 100), 0);
+            percent = 100 - currentSum;
+          }
+          return {
+            name: tier.current_tier || tier.name || 'NORMAL',
+            percentage: Math.max(0, percent),
+          };
+        });
+        setTierData(tierDataWithPercent);
         setActivities(activityRes.data);
       } catch (error) {
         console.error('Failed to fetch dashboard data:', error);

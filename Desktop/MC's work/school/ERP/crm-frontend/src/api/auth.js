@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 // Mock auth API - // TODO: Replace with real Auth Service @3000 when live
 export const authAPI = {
   login: async (credentials) => {
+    // TODO: Replace mock implementation with: return authClient.post('/auth/login', credentials);
     // Simulate delay
     await new Promise(r => setTimeout(r, 800));
     
@@ -40,6 +41,7 @@ export const authAPI = {
   },
 
   logout: async () => {
+    // TODO: Replace mock implementation with: return authClient.post('/auth/logout');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     toast.success('Logged out');
@@ -47,6 +49,7 @@ export const authAPI = {
   },
 
   getCurrentUser: async () => {
+    // TODO: Replace mock implementation with: return authClient.get('/auth/me');
     const token = localStorage.getItem('accessToken');
     if (!token) throw new Error('No token');
     
@@ -62,6 +65,7 @@ export const authAPI = {
   },
 
   refreshToken: async ({ refreshToken }) => {
+    // TODO: Replace mock implementation with: return authClient.post('/auth/refresh', { refreshToken });
     await new Promise(r => setTimeout(r, 400));
     // Simulate refresh
     return {

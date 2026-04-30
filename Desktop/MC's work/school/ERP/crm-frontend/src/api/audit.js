@@ -2,6 +2,7 @@ import { loadMockData, saveMockData, generateAudits } from '../utils/mockData';
 
 export const auditAPI = {
   getLogs: async (filters = {}) => {
+    // TODO: Replace mock implementation with: return auditClient.get('/audit/logs', { params: filters });
     await new Promise(r => setTimeout(r, 500));
     let audits = loadMockData('audits') || generateAudits(200);
 
@@ -29,6 +30,7 @@ export const auditAPI = {
   },
 
   createLog: async (logData) => {
+    // TODO: Replace mock implementation with: return auditClient.post('/audit/logs', logData);
     await new Promise(r => setTimeout(r, 200));
     let audits = loadMockData('audits') || [];
     const newLog = {
