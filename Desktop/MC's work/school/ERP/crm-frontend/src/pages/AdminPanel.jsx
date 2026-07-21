@@ -4,6 +4,7 @@ import { RuleEngineEditor } from '../components/admin/RuleEngineEditor';
 import { AuditLogViewer } from '../components/admin/AuditLogViewer';
 import { UserManager } from '../components/admin/UserManager';
 import { NotificationSender } from '../components/admin/NotificationSender';
+import { BonusRulesEditor } from '../components/admin/BonusRulesEditor';
 
 export const AdminPanel = () => {
   const { user } = useAuthStore();
@@ -39,9 +40,9 @@ export const AdminPanel = () => {
       <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
       <p className="text-sm text-gray-600">Current tab: {tab}</p>
       
-      <div className="border-b border-gray-200">
+<div className="border-b border-gray-200">
         <nav className="flex space-x-8" aria-label="Tabs">
-          {['notifications', 'rules', 'users', 'logs'].map((tabName) => {
+          {['notifications', 'bonus', 'rules', 'users', 'logs'].map((tabName) => {
             // Hide rules tab from regular users
             if (tabName === 'rules' && !hasRuleAccess) {
               return null;
@@ -65,6 +66,7 @@ export const AdminPanel = () => {
 
       <div className="mt-6">
         {tab === 'notifications' && <NotificationSender />}
+        {tab === 'bonus' && <BonusRulesEditor onSave={handleSaveRules} />}
         {tab === 'rules' && <RuleEngineEditor onSave={handleSaveRules} />}
         {tab === 'users' && <UserManager users={users} onAddUser={handleAddUser} onDeleteUser={handleDeleteUser} />}
         {tab === 'logs' && <AuditLogViewer logs={logs} />}

@@ -1,9 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { loadMockData } from '../../utils/mockData';
+
+const DEFAULT_BONUS_RATES = {
+  bronze: 0.01,
+  silver: 0.015,
+  gold: 0.02,
+  platinum: 0.03,
+};
 
 export const BonusCalculator = ({ onCalculate }) => {
   const [spendAmount, setSpendAmount] = useState('');
   const [tier, setTier] = useState('bronze');
   const [bonusPoints, setBonusPoints] = useState(null);
+  const [bonusRates, setBonusRates] = useState(DEFAULT_BONUS_RATES);
+
+  useEffect(() => {
+    const savedRates = loadMockData('bonusRates');
+    if (savedRates) {
+      setBonusRates(savedRates);
+    }
+  }, []);
 
   const handleCalculate = () => {
     if (!spendAmount) return;
@@ -13,7 +29,7 @@ export const BonusCalculator = ({ onCalculate }) => {
   };
 
   const calculateBonus = (amount, tier) => {
-    const rates = { bronze: 0.01, silver: 0.015, gold: 0.02, platinum: 0.03 };
+    const rates = bonusRates || DEFAULT_BONUS_RATES;
     return (amount * rates[tier]).toFixed(2);
   };
 
