@@ -13,9 +13,11 @@ export default function ServiceBlock({ service }: ServiceBlockProps) {
   const isLeft = service.imagePosition === 'left'
 
   // Dimensions
-  const ART_H = 220 
-  const BLUE_CARD_SIZE = 'clamp(240px, 28vw, 320px)'
-  const DARK_CARD_WIDTH = 'clamp(400px, 50vw, 650px)'
+  const ART_H = 160
+  const BLUE_CARD_WIDTH = 'clamp(240px, 22vw, 280px)'
+  const BLUE_CARD_HEIGHT = '250px'
+  const DARK_CARD_WIDTH = 'clamp(400px, 45vw, 620px)'
+  const DARK_CARD_HEIGHT = '280px'
 
   const artifactFloatAnim = {
     y: [0, -10, 0],
@@ -36,44 +38,44 @@ export default function ServiceBlock({ service }: ServiceBlockProps) {
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.7, ease: 'easeOut' }}
-      className="relative flex-shrink-0 z-30 flex flex-col items-center justify-center p-6"
+      className="relative flex-shrink-0 z-30"
       style={{
-        width: BLUE_CARD_SIZE,
-        height: BLUE_CARD_SIZE,
+        width: BLUE_CARD_WIDTH,
+        height: BLUE_CARD_HEIGHT,
         background: '#1c3572', // Exact brand blue from design
-        boxShadow: '0 8px 40px rgba(28, 53, 114, 0.3)',
+        boxShadow: '0 12px 40px rgba(28, 53, 114, 0.35)',
       }}
     >
-      {/* ── 3D Artifact ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 22, scale: 0.84 }}
-        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-        viewport={{ once: true, margin: '-40px' }}
-        transition={{
-          duration: 0.85,
-          ease: 'easeOut',
-          delay: 0.15,
-          ...artifactFloatTransition,
-        }}
-        animate={artifactFloatAnim}
-        className="absolute pointer-events-none select-none"
+      {/* ── 3D Artifact (50% outside top edge, 50% inside, horizontally centered) ── */}
+      <div
+        className="absolute pointer-events-none select-none z-40"
         style={{
-          top: 0,
-          left: '50%',
-          transform: 'translate(-50%, -50%)', // Centers exactly on the top edge
-          width: 180,
-          height: ART_H,
-          zIndex: 40,
+          top: '-80px', // Exactly 50% of 160px height above the top edge
+          left: 'calc(50% - 70px)', // Exactly centered horizontally (half of 140px width)
+          width: 140,
+          height: 160,
         }}
       >
-        <Image
-          src={service.imageSrc}
-          alt={service.title}
-          fill
-          sizes="180px"
-          className="object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)]"
-        />
-      </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 22, scale: 0.84 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{
+            ...artifactFloatTransition,
+            delay: 0.15,
+          }}
+          animate={artifactFloatAnim}
+          className="relative w-full h-full"
+        >
+          <Image
+            src={service.imageSrc}
+            alt={service.title}
+            fill
+            sizes="140px"
+            className="object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)]"
+          />
+        </motion.div>
+      </div>
 
       {/* ── Dotted Line ── */}
       <div 
@@ -84,8 +86,8 @@ export default function ServiceBlock({ service }: ServiceBlockProps) {
         }}
       />
 
-      {/* Title */}
-      <div className="relative z-10 w-full text-center mt-8">
+      {/* Title - Centered evenly in the space below the top artifact */}
+      <div className="absolute inset-x-0 bottom-2 top-[50px] flex flex-col items-center justify-center px-4 text-center z-10">
         <h3 className="text-white font-bold uppercase tracking-[0.15em] text-sm md:text-base leading-snug">
           {service.title}
         </h3>
@@ -108,29 +110,27 @@ export default function ServiceBlock({ service }: ServiceBlockProps) {
       className="relative flex-shrink-0 overflow-hidden z-20"
       style={{ 
         width: DARK_CARD_WIDTH, 
-        height: BLUE_CARD_SIZE,
-        // Overlap magic: pulls the dark card under the blue card slightly
-        ...(isLeft ? { marginLeft: '-12%' } : { marginRight: '-12%' })
+        height: DARK_CARD_HEIGHT,
+        background: '#2b2b2b', // Solid dark background per user request
+        // Pull dark card under blue card by fixed 50px overlap
+        ...(isLeft ? { marginLeft: '-50px' } : { marginRight: '-50px' })
       }}
     >
-      <Image
+      {/* Background Image commented out per user request */}
+      {/* <Image
         src={service.bgImageSrc}
         alt="Service background"
         fill
         sizes="(max-width: 768px) 100vw, 50vw"
         className="object-cover object-center"
-      />
-      {/* Dark overlay specifically calibrated for legibility */}
-      <div
-        className="absolute inset-0"
-        style={{ background: 'rgba(30, 30, 30, 0.85)' }}
-      />
+      /> */}
 
-      {/* Text Container - Padded on the side away from the blue block */}
+      {/* Text Container - Padded so text stays completely clear of the blue block */}
       <div 
-        className="relative z-10 h-full flex flex-col justify-center items-center px-10 py-6 text-center"
+        className="relative z-10 h-full flex flex-col justify-center items-center py-6 text-center"
         style={{
-          ...(isLeft ? { paddingLeft: '16%' } : { paddingRight: '16%' })
+          paddingLeft: isLeft ? '80px' : '30px',
+          paddingRight: isLeft ? '30px' : '80px',
         }}
       >
         <p className="text-xs md:text-sm leading-relaxed font-light tracking-wide text-white/90">
@@ -141,7 +141,7 @@ export default function ServiceBlock({ service }: ServiceBlockProps) {
   )
 
   return (
-    <div id={service.id} className="relative w-full pb-32">
+    <div id={service.id} className="relative w-full pt-24 pb-0">
       
       {/* ── Desktop layout (md and up) ──────────────────────────── */}
       <div className="hidden md:flex justify-center items-center w-full relative">
@@ -189,15 +189,15 @@ export default function ServiceBlock({ service }: ServiceBlockProps) {
         </div>
         
         {/* Dark description card */}
-        <div className="relative z-20 overflow-hidden shadow-lg" style={{ minHeight: 220 }}>
-          <Image
+        <div className="relative z-20 overflow-hidden shadow-lg" style={{ minHeight: 220, background: '#2b2b2b' }}>
+          {/* Background Image commented out per user request */}
+          {/* <Image
             src={service.bgImageSrc}
             alt="Service background"
             fill
             sizes="100vw"
             className="object-cover"
-          />
-          <div className="absolute inset-0 bg-black/80" />
+          /> */}
           <div className="relative z-10 p-8 text-center flex items-center justify-center h-full">
             <p className="text-sm leading-relaxed font-light tracking-wide text-white/90">
               {service.description}

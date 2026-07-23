@@ -11,7 +11,7 @@ export default function ServicesSection() {
       id="services"
       // CRITICAL: overflow-x-clip hides the infinitely long dotted lines so they don't break the page width, 
       // but allows vertical overflow so the top mask can safely breach the container bounding box.
-      className="relative overflow-x-clip py-32 bg-[#e6e6e6]" 
+      className="relative overflow-x-clip py-32 bg-white" 
     >
       <div className="max-w-[1400px] w-full mx-auto relative z-10">
         
@@ -34,10 +34,14 @@ export default function ServicesSection() {
           </div>
         </motion.div>
 
-        {/* Service Blocks List */}
+        {/* Service Blocks List - gap between each block must be >= artifact overflow height (80px) */}
         <div className="flex flex-col">
-          {services.map((service) => (
-            <ServiceBlock key={service.id} service={service} />
+          {services.map((service, i) => (
+            <div key={service.id}>
+              {/* Visible separator between groups — gives space for the artifact that floats above each blue card */}
+              {i > 0 && <div style={{ height: '80px' }} />}
+              <ServiceBlock service={service} />
+            </div>
           ))}
         </div>
         
